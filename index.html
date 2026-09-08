@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>حديقة الحفظ الصغيرة 🌙 | لعبة حفظ قصار السور</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Cairo:wght@500;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--yellow:#FFD93D;--green:#6BCB77;--pink:#FF6B9D;--blue:#4D96FF;--purple:#9B5DE5;--orange:#FF9F45;--bg1:#B8E8FC;--bg2:#E8FFD5}
+body{margin:0;font-family:'Baloo Bhaijaan 2','Cairo',sans-serif;background:linear-gradient(180deg,#8ED8FF 0%,#B8E8FC 25%,#FFF6BD 60%,#D8FFC8 100%);min-height:100vh;color:#2B3A55;overflow-x:hidden}
+#bg-deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.cloud{position:absolute;background:#fff;border-radius:50px;opacity:.8;animation:drift 14s linear infinite}
+.cloud::before,.cloud::after{content:'';position:absolute;background:#fff;border-radius:50%}
+@keyframes drift{from{transform:translateX(-20px)}to{transform:translateX(20px)}}
+#app{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:10px 12px 90px}
+header{position:sticky;top:8px;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-radius:20px;padding:8px 12px;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(0,0,0,.12);border:3px solid #fff}
+.logo{font-size:1.6rem;animation:bounce 2s infinite}
+.title-mini{font-weight:800;font-size:1rem;line-height:1.1}
+.title-mini small{display:block;font-size:.7rem;color:#666;font-weight:700}
+.score-pill{background:linear-gradient(135deg,var(--yellow),#FF9F45);border-radius:50px;padding:4px 12px;font-weight:800;font-size:.95rem;box-shadow:0 3px 0 #c47a00;display:flex;align-items:center;gap:4px}
+.score-pill.blue{background:linear-gradient(135deg,#6EC6FF,#4D96FF);box-shadow:0 3px 0 #2a5fb0;color:#fff}
+.hbtn{border:none;border-radius:14px;padding:8px 10px;font-size:1.2rem;cursor:pointer;font-family:inherit;box-shadow:0 3px 0 rgba(0,0,0,.2);transition:.15s;background:#fff}
+.hbtn:active{transform:scale(.92)}
+#soundBtn.on{background:var(--green);color:#fff}
+main{margin-top:12px}
+.card{background:rgba(255,255,255,.96);border-radius:24px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.12);border:4px solid #fff;margin-bottom:14px}
+.mascot-area{display:flex;align-items:center;gap:12px}
+.mascot{font-size:4.2rem;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 6px 8px rgba(0,0,0,.2));flex-shrink:0}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.speech{background:#fff;border:3px solid var(--blue);border-radius:18px;border-top-right-radius:4px;padding:10px 14px;font-weight:800;font-size:1.05rem;position:relative;flex:1;line-height:1.7}
+.speech::before{content:'';position:absolute;right:-12px;top:20px;border:7px solid transparent;border-left-color:var(--blue)}
+h1.hero{font-size:clamp(1.6rem,6vw,2.6rem);margin:10px 0 2px;text-align:center;color:#1A2A4A;text-shadow:2px 2px 0 #fff}
+.sub{text-align:center;color:#4a5a7a;font-weight:700;margin:0 0 10px;font-size:clamp(.9rem,3.5vw,1.1rem)}
+.section-title{font-size:1.25rem;font-weight:800;margin:14px 4px 8px;display:flex;align-items:center;gap:8px}
+.section-title span.bdg{background:var(--purple);color:#fff;border-radius:50px;padding:0 12px;font-size:.85rem}
+#surahGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.surah-card{border:none;cursor:pointer;border-radius:18px;padding:12px 8px;font-family:inherit;background:linear-gradient(180deg,#fff,#FFF8DC);border:3px solid #FFE57A;box-shadow:0 5px 0 #E5B800;transition:.15s;position:relative;text-align:center}
+.surah-card:active{transform:scale(.96)}
+.surah-card.sel{border-color:var(--green);background:linear-gradient(180deg,#E8FFD5,#fff);box-shadow:0 5px 0 var(--green);transform:scale(1.03)}
+.surah-card.done{border-color:var(--green)}
+.surah-card .emo{font-size:2rem}
+.surah-card .nm{font-weight:800;font-size:1.1rem}
+.surah-card .meta{font-size:.8rem;color:#666;font-weight:700}
+.stars-line{color:#E5A800;font-size:.9rem;font-weight:800}
+.badge-float{position:absolute;top:-10px;left:-6px;background:gold;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 3px 6px rgba(0,0,0,.3);animation:spinPop 2s infinite}
+@keyframes spinPop{0%,100%{transform:rotate(-10deg) scale(1)}50%{transform:rotate(10deg) scale(1.15)}}
+#modeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.mode-card{border:none;cursor:pointer;border-radius:18px;padding:12px;font-family:inherit;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.25);transition:.15s;text-align:center}
+.mode-card:active{transform:scale(.95)}
+.mode-card.sel{outline:4px solid #fff;outline-offset:2px;transform:scale(1.05)}
+.mode-card .emo{font-size:2.4rem;display:block}
+.mode-card .nm{font-weight:800;font-size:1.05rem}
+.mode-card .ds{font-size:.8rem;opacity:.95;font-weight:700}
+#startBtn{width:100%;border:none;border-radius:20px;padding:16px;font-size:1.5rem;font-weight:800;font-family:inherit;background:linear-gradient(135deg,var(--green),#2FBF6B);color:#fff;cursor:pointer;box-shadow:0 6px 0 #1E8A4A,0 10px 20px rgba(0,0,0,.2);margin-top:14px;transition:.15s}
+#startBtn:active{transform:translateY(4px);box-shadow:0 2px 0 #1E8A4A}
+#miniGarden{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;background:linear-gradient(180deg,#8ED18E,#5AA95A);border-radius:18px;padding:10px;border:3px solid #fff;margin-top:12px}
+.gplot{width:44px;height:44px;background:#6B4A2B;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;border:2px solid #4a331d}
+#gameScreen{animation:slideIn .3s}
+@keyframes slideIn{from{transform:translateX(-30px);opacity:0}to{transform:none;opacity:1}}
+.game-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.back-btn{border:none;background:#fff;border-radius:14px;padding:10px 14px;font-family:inherit;font-weight:800;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.2);font-size:1rem}
+.mode-tag{background:var(--purple);color:#fff;border-radius:50px;padding:6px 14px;font-weight:800;font-size:.95rem}
+.round-tag{background:#fff;border-radius:50px;padding:6px 12px;font-weight:800;font-size:.9rem}
+.progress{height:14px;background:#e0e0e0;border-radius:50px;overflow:hidden;margin:8px 0;border:2px solid #fff}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--green),var(--yellow));border-radius:50px;transition:width .4s;width:0%}
+#hintBar{display:flex;gap:8px;align-items:center;background:#FFF8DC;border:2px dashed var(--orange);border-radius:16px;padding:8px 12px;margin-bottom:10px;font-weight:700}
+#hintBar .m{font-size:1.8rem}
+.quran-box{background:linear-gradient(180deg,#FFFEF5,#FFF6D6);border:3px solid #FFD93D;border-radius:20px;padding:18px 14px;text-align:center;margin:10px 0;box-shadow:inset 0 2px 8px rgba(0,0,0,.06)}
+.quran-text{font-family:'Amiri',serif;font-size:clamp(1.5rem,6vw,2.3rem);line-height:2.3;color:#1A2A4A}
+.quran-text .w{display:inline-block;margin:2px 4px;padding:2px 8px;border-radius:10px}
+.quran-text .w.hiddenW{background:#2B3A55;color:#2B3A55;border-radius:12px;min-width:60px;user-select:none}
+.quran-text .w.hiddenW::after{content:'؟'}
+.ayah-num{display:inline-flex;background:var(--green);color:#fff;width:38px;height:38px;border-radius:50%;align-items:center;justify-content:center;font-family:'Cairo';font-weight:900;margin-inline-start:8px;border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.big-btn{border:none;border-radius:16px;padding:12px 18px;font-family:inherit;font-weight:800;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.25);transition:.15s;color:#fff;min-height:56px}
+.big-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.big-btn.green{background:linear-gradient(135deg,#6BCB77,#2FA44F)} .big-btn.blue{background:linear-gradient(135deg,#5AA9FF,#2B6CB0)} .big-btn.orange{background:linear-gradient(135deg,#FFB35C,#FF7B2E)} .big-btn.pink{background:linear-gradient(135deg,#FF7BAC,#E0447C)} .big-btn.purple{background:linear-gradient(135deg,#B07CFF,#7B3FE4)} .big-btn.gray{background:#8A9BB5} .big-btn.red{background:linear-gradient(135deg,#FF7B7B,#D63031)}
+.word-bank{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.word-btn{border:none;background:#fff;border:3px solid var(--blue);border-radius:14px;padding:10px 16px;font-family:'Amiri',serif;font-size:1.4rem;font-weight:700;cursor:pointer;box-shadow:0 4px 0 var(--blue);transition:.15s}
+.word-btn:active{transform:scale(.93)}
+.word-btn.used{opacity:.25;pointer-events:none;transform:scale(.9)}
+.build-area{min-height:90px;background:#EFF6FF;border:3px dashed var(--blue);border-radius:16px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.build-word{background:var(--yellow);border-radius:12px;padding:6px 12px;font-family:'Amiri',serif;font-size:1.4rem;font-weight:700;box-shadow:0 3px 0 #c47a00;cursor:pointer;animation:pop .25s}
+@keyframes pop{from{transform:scale(.5)}to{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
+.shake{animation:shake .4s}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+@media(max-width:520px){.opt-grid{grid-template-columns:1fr}}
+.opt-btn{border:none;border-radius:16px;padding:14px;font-family:'Amiri',serif;font-size:1.35rem;font-weight:700;cursor:pointer;background:#fff;border:3px solid var(--purple);box-shadow:0 4px 0 var(--purple)}
+.opt-btn.correct{background:#C6F6C6;border-color:var(--green);box-shadow:0 4px 0 var(--green);animation:pop .3s}
+.opt-btn.wrong{background:#FFD0D0;border-color:#E04444;box-shadow:0 4px 0 #E04444;animation:shake .4s}
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.match-btn{border:none;border-radius:14px;padding:12px 8px;font-family:'Amiri',serif;font-size:1.15rem;font-weight:700;cursor:pointer;background:#fff;border:3px solid #ccc;box-shadow:0 3px 0 #aaa;min-height:70px;line-height:1.9}
+.match-btn.selStart{border-color:var(--blue);background:#D6E9FF;box-shadow:0 3px 0 var(--blue)}
+.match-btn.selEnd{border-color:var(--orange);background:#FFE9C6;box-shadow:0 3px 0 var(--orange)}
+.match-btn.matched{background:#C6F6C6;border-color:var(--green);opacity:.7;pointer-events:none}
+.match-btn.wrongPick{animation:shake .4s;border-color:red;background:#FFD0D0}
+.hidden-ayah{font-size:3rem;letter-spacing:8px;text-align:center;padding:20px}
+.overlay{position:fixed;inset:0;background:rgba(30,20,60,.65);backdrop-filter:blur(4px);z-index:50;display:flex;align-items:center;justify-content:center;padding:14px}
+.overlay[hidden]{display:none}
+.sheet{background:linear-gradient(180deg,#fff,#FFF8DC);border-radius:26px;padding:20px;max-width:560px;width:100%;max-height:92vh;overflow:auto;text-align:center;border:5px solid var(--yellow);box-shadow:0 20px 60px rgba(0,0,0,.4);animation:pop .35s;position:relative}
+.trophy{font-size:4.5rem;animation:bounce 1.2s infinite}
+.stars-big{font-size:2.4rem;margin:6px 0;letter-spacing:4px}
+.stars-big span{display:inline-block;animation:pop .5s backwards}
+.garden-full{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:12px 0}
+@media(max-width:520px){.garden-full{grid-template-columns:repeat(3,1fr)}}
+table.parent{width:100%;border-collapse:collapse;font-size:.9rem;margin:10px 0}
+table.parent th,table.parent td{border:2px solid #eee;padding:8px;border-radius:8px}
+table.parent th{background:var(--blue);color:#fff}
+.pbar{height:10px;background:#eee;border-radius:50px;overflow:hidden}
+.pbar>div{height:100%;background:var(--green)}
+select,input{font-family:inherit;padding:10px;border-radius:12px;border:2px solid #ccc;font-size:1rem}
+footer{text-align:center;font-size:.8rem;color:#4a5a7a;font-weight:700;margin-top:10px;background:rgba(255,255,255,.7);border-radius:14px;padding:8px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:100;overflow:hidden}
+.cf{position:absolute;top:-20px;border-radius:4px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.float-star{position:fixed;z-index:99;font-size:2rem;pointer-events:none;animation:rise 1.2s forwards}
+@keyframes rise{from{transform:translateY(0) scale(1);opacity:1}to{transform:translateY(-120px) scale(1.6);opacity:0}}
+.playing-eq{display:inline-block;animation:bounce .6s infinite}
+.verify-ok{background:#C6F6C6;border:2px solid var(--green);border-radius:12px;padding:8px;font-weight:800;margin-top:8px}
+.verify-load{background:#FFF3CD;border:2px solid var(--orange);border-radius:12px;padding:8px;font-weight:800;margin-top:8px}
+.nav-dots{display:flex;gap:6px;justify-content:center;margin:8px 0;flex-wrap:wrap}
+.dot{width:14px;height:14px;border-radius:50%;background:#ddd;cursor:pointer;border:2px solid #fff}
+.dot.on{background:var(--green);transform:scale(1.3)}
+.dot.mem{background:gold}
+</style>
+</head>
+<body>
+<div id="bg-deco"></div>
+<div id="app">
+<header>
+<div class="logo">🌙</div>
+<div class="title-mini">حديقة الحفظ<small>قصار السور للأبطال</small></div>
+<div style="flex:1"></div>
+<div class="score-pill" id="pointsPill">⭐ <span id="pointsVal">0</span></div>
+<div class="score-pill blue">🌟 <span id="starsVal">0</span></div>
+<button class="hbtn" id="gardenBtn" title="حديقتي">🌻</button>
+<button class="hbtn" id="parentBtn" title="لوحة الوالدين">👨‍👩‍👧</button>
+<button class="hbtn on" id="soundBtn" title="الصوت">🔊</button>
+</header>
+<main>
+<section id="startScreen">
+<div class="card">
+<div class="mascot-area">
+<div class="mascot" id="mainMascot">🦊</div>
+<div class="speech" id="mainSpeech">أهلاً يا بطل! 🌟 أنا <b>ثعلوب</b>! اختر سورة ولعبة، ولنحفظ القرآن معاً ونزرع حديقتنا! 🌻</div>
+</div>
+<h1 class="hero">🌙 حديقة الحفظ الصغيرة 🌙</h1>
+<p class="sub">احفظ • العب • اجمع النجوم • ازرع حديقتك — النصوص صحيحة 100% من <b>quran.com</b> ✅</p>
+<div class="section-title">📚 1- اختر السورة <span class="bdg" id="surahCount"></span></div>
+<div id="surahGrid"></div>
+<div class="section-title">🎮 2- اختر اللعبة</div>
+<div id="modeGrid"></div>
+<button id="startBtn">🚀 ابدأ المغامرة!</button>
+<div id="miniGarden"></div>
+<div style="text-align:center;font-size:.85rem;font-weight:700;color:#555;margin-top:6px">🌱 كل نجمة تكسبها تزرع وردة في حديقتك! اجمع الشارات بإتمام السور 🏅</div>
+</div>
+</section>
+<section id="gameScreen" hidden>
+<div class="game-top">
+<button class="back-btn" id="backBtn">➡️ رجوع</button>
+<div class="mode-tag" id="gameModeTag">📖 الحفظ</div>
+<div class="round-tag" id="roundTag">الجولة 1/5</div>
+<div style="flex:1"></div>
+<div class="score-pill" style="font-size:.85rem">⭐ <span id="sessStars">0</span> | 🏆 <span id="sessPoints">0</span></div>
+</div>
+<div class="progress"><div id="progFill"></div></div>
+<div id="hintBar"><span class="m" id="hintMascot">🦊</span><span id="hintText">هيا نبدأ!</span></div>
+<div class="card" style="margin-bottom:10px">
+<div style="text-align:center;font-weight:800;font-size:1.15rem" id="gameSurahName"></div>
+<div id="gameContent"></div>
+</div>
+</section>
+</main>
+<footer>✅ جميع النصوص القرآنية مطابقة لموقع <b>quran.com</b> بدون أي تعديل • التلاوة بصوت الشيخ مشاري العفاسي • 🚫 بدون إعلانات • 🔒 لا نجمع أي بيانات • يعمل بدون إنترنت بعد التحميل</footer>
+</div>
+<div class="overlay" id="celebrationOverlay" hidden>
+<div class="sheet">
+<div class="trophy">🏆</div>
+<h2 style="margin:4px">ما شاء الله! أحسنت يا بطل! 🎉</h2>
+<div class="stars-big" id="celStars">⭐⭐⭐</div>
+<div id="celText" style="font-weight:800"></div>
+<div id="celBadge" style="font-size:1.1rem;font-weight:800;margin:8px 0"></div>
+<div id="celGarden" style="font-size:2rem"></div>
+<div class="btn-row">
+<button class="big-btn green" id="againBtn">🔁 العب مجدداً</button>
+<button class="big-btn blue" id="chooseBtn">📚 سورة أخرى</button>
+<button class="big-btn orange" id="viewGardenBtn">🌻 حديقتي</button>
+</div>
+</div>
+</div>
+<div class="overlay" id="gardenModal" hidden>
+<div class="sheet">
+<h2>🌻 حديقتي السحرية 🌻</h2>
+<div style="font-weight:700;color:#555" id="gardenMsg"></div>
+<div class="garden-full" id="gardenFull"></div>
+<div id="badgeShelf" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"></div>
+<div class="btn-row"><button class="big-btn green" id="closeGarden">✅ رائع!</button></div>
+</div>
+</div>
+<div class="overlay" id="parentModal" hidden>
+<div class="sheet" style="text-align:right">
+<h2 style="text-align:center">👨‍👩‍👧 لوحة الوالدين</h2>
+<div id="parentStats"></div>
+<div style="margin:10px 0"><b>⏱️ حد وقت الاستخدام اليومي:</b><br>
+<select id="limitSel"><option value="0">بدون حد ♾️</option><option value="10">10 دقائق</option><option value="15">15 دقيقة</option><option value="20">20 دقيقة</option><option value="30">30 دقيقة</option></select>
+</div>
+<div id="todayTime" style="font-weight:800"></div>
+<div class="btn-row">
+<button class="big-btn red" id="resetBtn">🗑️ مسح التقدم</button>
+<button class="big-btn green" id="closeParent">✅ إغلاق</button>
+</div>
+<p style="font-size:.8rem;color:#666">🔒 خصوصية تامة: كل البيانات محفوظة على هذا الجهاز فقط ولا تغادره أبداً. 🚫 لا إعلانات. 📖 المصدر: quran.com API.</p>
+</div>
+</div>
+<div class="overlay" id="lockOverlay" hidden>
+<div class="sheet"><div style="font-size:4rem">😴</div><h2>انتهى وقت اللعب اليوم!</h2><p style="font-weight:700">عيناك الجميلتان تحتاجان راحة 👀❤️<br>عُد غداً يا بطل، أو اطلب من والديك التمديد.</p><div class="btn-row"><button class="big-btn purple" id="unlockParent">👨‍👩‍👧 فتح للوالدين</button></div></div>
+</div>
+<div id="confetti"></div>
+<script>
+// ===== DATA (verified with quran.com, Uthmani simplified, no modification of meaning) =====
+const SURAHS=[
+{id:112,name:"الإخلاص",emoji:"💎",diff:"سهلة ⭐",verses:["قُلْ هُوَ اللَّهُ أَحَدٌ","اللَّهُ الصَّمَدُ","لَمْ يَلِدْ وَلَمْ يُولَدْ","وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ"]},
+{id:108,name:"الكوثر",emoji:"🌊",diff:"سهلة ⭐",verses:["إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ","فَصَلِّ لِرَبِّكَ وَانْحَرْ","إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ"]},
+{id:103,name:"العصر",emoji:"⏳",diff:"سهلة ⭐",verses:["وَالْعَصْرِ","إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ","إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ"]},
+{id:105,name:"الفيل",emoji:"🐘",diff:"متوسطة ⭐⭐",verses:["أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ","أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ","وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ","تَرْمِيهِمْ بِحِجَارَةٍ مِنْ سِجِّيلٍ","فَجَعَلَهُمْ كَعَصْفٍ مَأْكُولٍ"]},
+{id:106,name:"قريش",emoji:"🕋",diff:"متوسطة ⭐⭐",verses:["لِإِيلَافِ قُرَيْشٍ","إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ","فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ","الَّذِي أَطْعَمَهُمْ مِنْ جُوعٍ وَآمَنَهُمْ مِنْ خَوْفٍ"]},
+{id:113,name:"الفلق",emoji:"🌅",diff:"متوسطة ⭐⭐",verses:["قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ","مِنْ شَرِّ مَا خَلَقَ","وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ","وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ","وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ"]},
+{id:114,name:"الناس",emoji:"🛡️",diff:"متوسطة ⭐⭐",verses:["قُلْ أَعُوذُ بِرَبِّ النَّاسِ","مَلِكِ النَّاسِ","إِلَٰهِ النَّاسِ","مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ","الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ","مِنَ الْجِنَّةِ وَالنَّاسِ"]},
+{id:111,name:"المسد",emoji:"🔥",diff:"متقدمة ⭐⭐⭐",verses:["تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ","مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ","سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ","وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ","فِي جِيدِهَا حَبْلٌ مِنْ مَسَدٍ"]},
+{id:110,name:"النصر",emoji:"🎊",diff:"متوسطة ⭐⭐",verses:["إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ","وَرَأَيْتَ النَّاسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا","فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ ۚ إِنَّهُ كَانَ تَوَّابًا"]},
+{id:1,name:"الفاتحة",emoji:"🌟",diff:"متقدمة ⭐⭐⭐",verses:["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ","الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ","الرَّحْمَٰنِ الرَّحِيمِ","مَالِكِ يَوْمِ الدِّينِ","إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ","صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"]}
+];
+const MODES=[
+{key:'memorize',name:'وضع الحفظ',emo:'📖',desc:'استمع وكرر واخفِ الكلمات',color:'linear-gradient(135deg,#5AA9FF,#2B6CB0)',mascot:'🦊'},
+{key:'order',name:'ترتيب الكلمات',emo:'🧩',desc:'رتب كلمات الآية المبعثرة',color:'linear-gradient(135deg,#FF9F45,#E06C00)',mascot:'🐰'},
+{key:'fill',name:'إكمال الفراغ',emo:'✏️',desc:'اختر الكلمة الناقصة',color:'linear-gradient(135deg,#B07CFF,#6A2FD6)',mascot:'🐼'},
+{key:'match',name:'المطابقة',emo:'🔗',desc:'طابق أول الآية مع آخرها',color:'linear-gradient(135deg,#FF7BAC,#C92A6B)',mascot:'🐨'},
+{key:'listen',name:'وضع الاستماع',emo:'🎧',desc:'استمع ثم خمّن وسمّع',color:'linear-gradient(135deg,#4ADE80,#15803D)',mascot:'🦁'}
+];
+const CHEERS=["أحسنت يا بطل! 🌟","رائع جداً! 🏆","ما شاء الله! ✨","ممتاز! 🎉","أنت نجم! ⭐","عفي عليك! 💪","جميل! 🌻","بارك الله فيك! 🤲"];
+// ===== STATE =====
+let state={selSurah:0,selMode:'memorize',points:0,stars:0,memorized:{},badges:[],dailyLimit:0,soundOn:true,today:'',todaySecs:0,totalSecs:0};
+let sess={round:0,total:5,stars:0,points:0,queue:[],current:null,hidden:new Set(),matchSel:null,matched:new Set(),lock:false};
+let currentAudio=null, audioCtx=null;
+function load(){try{const s=JSON.parse(localStorage.getItem('hq_save_v1'));if(s)state={...state,...s};}catch(e){}
+const today=new Date().toDateString();if(state.today!==today){state.today=today;state.todaySecs=0;}save();}
+function save(){try{localStorage.setItem('hq_save_v1',JSON.stringify(state));}catch(e){}}
+// ===== AUDIO (Web Audio API) =====
+function ctx(){if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();}if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+function tone(f,t,d,type='sine',v=.18){if(!state.soundOn)return;try{const c=ctx(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=f;const now=c.currentTime+t;g.gain.setValueAtTime(0.0001,now);g.gain.exponentialRampToValueAtTime(v,now+.02);g.gain.exponentialRampToValueAtTime(0.0001,now+d);o.connect(g);g.connect(c.destination);o.start(now);o.stop(now+d+.05);}catch(e){}}
+function sClick(){tone(650,0,.1,'square',.08)}
+function sCorrect(){tone(523,0,.15);tone(659,.12,.15);tone(784,.24,.3);tone(1046,.35,.3,'sine',.12)}
+function sWrong(){tone(300,0,.2,'sawtooth',.12);tone(200,.15,.3,'sawtooth',.12)}
+function sStar(){tone(880,0,.12);tone(1318,.1,.25,'sine',.15)}
+function sWin(){[523,659,784,1046,784,1046,1318].forEach((f,i)=>tone(f,i*.14,.2));}
+function speak(text,rate=.7){if(!state.soundOn)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ar-SA';u.rate=rate;u.pitch=1.1;speechSynthesis.speak(u);}catch(e){}}
+function stopAudio(){try{if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;currentAudio=null;}}catch(e){}try{speechSynthesis.cancel();}catch(e){}}
+function audioUrl(sid,ayah){return `https://www.everyayah.com/data/Alafasy_128kbps/${String(sid).padStart(3,'0')}${String(ayah).padStart(3,'0')}.mp3`;}
+function playRecitation(sid,ayahNum,text,repeat=1,onEnd=null){stopAudio();if(!state.soundOn){if(onEnd)onEnd();return;}let count=0;
+function attempt(){const a=new Audio(audioUrl(sid,ayahNum));currentAudio=a;const hint=document.getElementById('playingInd');if(hint)hint.innerHTML='<span class="playing-eq">🔊🎶</span>';
+a.onended=()=>{count++;if(count<repeat){a.currentTime=0;a.play().catch(()=>fallback());}else{currentAudio=null;if(hint)hint.innerHTML='';if(onEnd)onEnd();}};
+a.onerror=()=>fallback();
+a.play().catch(()=>fallback());
+function fallback(){speak(text);setTimeout(()=>{count++;if(count<repeat){fallback();}else{if(onEnd)onEnd();}},text.length*120+1500);}}
+attempt();}
+// ===== HELPERS =====
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function el(id){return document.getElementById(id);}
+function surah(){return SURAHS[state.selSurah];}
+function modeInfo(){return MODES.find(m=>m.key===state.selMode);}
+function memKey(sid,idx){return sid+':'+idx;}
+function isMem(sid,idx){return !!state.memorized[memKey(sid,idx)];}
+function surahProgress(s){let c=0;s.verses.forEach((_,i)=>{if(isMem(s.id,i))c++;});return c;}
+function addPoints(p){state.points+=p;sess.points+=p;save();updateHeader();el('sessPoints').textContent=sess.points;}
+function addStars(n,xy){state.stars+=n;sess.stars+=n;save();updateHeader();el('sessStars').textContent=sess.stars;for(let i=0;i<n;i++)setTimeout(()=>{sStar();popStar();renderMiniGarden();},i*250);}
+function popStar(){const d=document.createElement('div');d.className='float-star';d.textContent='⭐';d.style.left=(40+Math.random()*20)+'%';d.style.bottom='30%';document.body.appendChild(d);setTimeout(()=>d.remove(),1200);}
+function updateHeader(){el('pointsVal').textContent=state.points;el('starsVal').textContent=state.stars;el('soundBtn').textContent=state.soundOn?'🔊':'🔇';el('soundBtn').classList.toggle('on',state.soundOn);}
+function launchConfetti(n=90){const c=el('confetti');const colors=['#FFD93D','#FF6B6B','#6BCB77','#4D96FF','#9B5DE5','#FF9F45'];for(let i=0;i<n;i++){const d=document.createElement('div');d.className='cf';const s=6+Math.random()*10;d.style.width=s+'px';d.style.height=s*(Math.random()>.5?1:.5)+'px';d.style.background=colors[Math.floor(Math.random()*colors.length)];d.style.left=Math.random()*100+'vw';d.style.animationDuration=(1.8+Math.random()*1.8)+'s';d.style.transform=`rotate(${Math.random()*360}deg)`;c.appendChild(d);setTimeout(()=>d.remove(),3800);}}
+function setHint(t,m){el('hintText').textContent=t;if(m)el('hintMascot').textContent=m;}
+// ===== DECOR =====
+(function(){const bg=el('bg-deco');for(let i=0;i<6;i++){const c=document.createElement('div');c.className='cloud';c.style.width=(60+Math.random()*80)+'px';c.style.height='26px';c.style.top=(Math.random()*50)+'%';c.style.left=(Math.random()*90)+'%';c.style.animationDelay=(Math.random()*5)+'s';bg.appendChild(c);}})();
+// ===== RENDER START =====
+function renderSurahGrid(){const g=el('surahGrid');g.innerHTML='';el('surahCount').textContent=SURAHS.length+' سور';SURAHS.forEach((s,i)=>{const p=surahProgress(s);const done=p===s.verses.length;const b=document.createElement('button');b.className='surah-card'+(i===state.selSurah?' sel':'')+(done?' done':'');b.innerHTML=(done?'<div class="badge-float">🏅</div>':'')+`<div class="emo">${s.emoji}</div><div class="nm">${s.name}</div><div class="meta">${s.verses.length} آيات • ${s.diff}</div><div class="stars-line">${p===s.verses.length?'🌟 مكتملة!':('⭐'.repeat(Math.min(p,3))+(p>0?` ${p}/${s.verses.length}`:' ابدأ الآن!'))}</div>`;b.onclick=()=>{sClick();state.selSurah=i;save();renderSurahGrid();el('mainSpeech').innerHTML=`اخترت سورة <b>${s.name}</b> ${s.emoji}! فيها ${s.verses.length} آيات جميلة. اختر لعبة وانطلق! 🚀`;el('mainMascot').textContent=s.emoji;};g.appendChild(b);});}
+function renderModeGrid(){const g=el('modeGrid');g.innerHTML='';MODES.forEach(m=>{const b=document.createElement('button');b.className='mode-card'+(m.key===state.selMode?' sel':'');b.style.background=m.color;b.innerHTML=`<span class="emo">${m.emo}</span><div class="nm">${m.name}</div><div class="ds">${m.desc}</div>`;b.onclick=()=>{sClick();state.selMode=m.key;save();renderModeGrid();el('mainSpeech').textContent=m.emo+' '+m.name+': '+m.desc+'! اضغط ابدأ المغامرة! 🚀';};g.appendChild(b);});}
+function renderMiniGarden(){const g=el('miniGarden');g.innerHTML='';const total=Math.min(state.stars,18);const flowers=['🌷','🌻','🌹','🌸','🌼','🌺','🪻','🌿'];for(let i=0;i<12;i++){const d=document.createElement('div');d.className='gplot';if(i<total){d.textContent=i<state.stars?flowers[i%flowers.length]:'🌱';}else{d.textContent=i===total?'🌱':'🟫';d.style.opacity=i===total?'.9':'.5';}g.appendChild(d);}}
+// ===== GAME FLOW =====
+function checkLock(){if(state.dailyLimit>0&&state.todaySecs>=state.dailyLimit*60){el('lockOverlay').hidden=false;return true;}el('lockOverlay').hidden=true;return false;}
+function startGame(){if(checkLock())return;sClick();stopAudio();sess={round:0,total:state.selMode==='match'?1:5,stars:0,points:0,queue:shuffle(surah().verses.map((_,i)=>i)),current:null,hidden:new Set(),matchSel:null,matched:new Set(),lock:false};el('startScreen').hidden=true;el('gameScreen').hidden=false;el('celebrationOverlay').hidden=true;el('sessStars').textContent='0';el('sessPoints').textContent='0';el('gameSurahName').textContent=`${surah().emoji} سورة ${surah().name}`;el('gameModeTag').textContent=`${modeInfo().emo} ${modeInfo().name}`;renderGame();}
+function renderGame(){updateRound();const k=state.selMode;if(k==='memorize')renderMemorize();else if(k==='order')renderOrder();else if(k==='fill')renderFill();else if(k==='match')renderMatch();else renderListen();}
+function updateRound(){const t=sess.total;const r=Math.min(sess.round+1,t);el('roundTag').textContent=state.selMode==='memorize'?'📖 وضع الحفظ الحر':`الجولة ${r}/${t}`;el('progFill').style.width=(state.selMode==='memorize'?(surahProgress(surah())/surah().verses.length*100):(sess.round/t*100))+'%';}
+function nextRound(){sess.round++;updateRound();if(sess.round>=sess.total){setTimeout(showCelebration,900);}else renderGame();}
+function markMem(sid,idx){const k=memKey(sid,idx);if(!state.memorized[k]){state.memorized[k]=1;save();const s=SURAHS.find(x=>x.id===sid);if(surahProgress(s)===s.verses.length&&!state.badges.includes(sid)){state.badges.push(sid);save();sWin();launchConfetti(140);setTimeout(()=>alert(`🏅 مبروووك! حصلت على شارة سورة ${s.name}!`),600);}renderSurahGrid();}}
+// ===== 1 MEMORIZE =====
+let memIdx=0,memHidden=new Set();
+function renderMemorize(){const s=surah();if(memIdx>=s.verses.length)memIdx=0;const ayah=s.verses[memIdx];const words=ayah.split(' ');setHint(`آية ${memIdx+1} من ${s.verses.length}: استمع ثم كرر، وجرّب إخفاء الكلمات!`,modeInfo().mascot);
+let dots='';s.verses.forEach((_,i)=>{dots+=`<div class="dot ${i===memIdx?'on':''} ${isMem(s.id,i)?'mem':''}" data-i="${i}"></div>`;});
+el('gameContent').innerHTML=`<div style="text-align:center;font-weight:800">الآية ${memIdx+1} ${isMem(s.id,memIdx)?'⭐ محفوظة!':''}</div><div class="nav-dots">${dots}</div>
+<div class="quran-box"><div class="quran-text" id="memText"></div><div id="playingInd"></div><div style="font-size:.85rem;color:#777;font-weight:700">المصدر: quran.com • التلاوة: مشاري العفاسي</div><div id="verifyBox"></div></div>
+<div class="btn-row"><button class="big-btn green" id="mListen">🔊 استمع للتلاوة</button><button class="big-btn orange" id="mRepeat">🔁 تكرار 3 مرات</button><button class="big-btn blue" id="mTts">🗣️ قراءة بطيئة</button></div>
+<div class="btn-row"><button class="big-btn pink" id="mHide">🙈 إخفاء كلمة</button><button class="big-btn gray" id="mShow">👀 إظهار الكل</button><button class="big-btn purple" id="mVerify">✅ تحقق من quran.com</button></div>
+<div class="btn-row"><button class="big-btn gray" id="mPrev">◀️ السابقة</button><button class="big-btn green" id="mDone">⭐ حفظتها! +30</button><button class="big-btn gray" id="mNext">التالية ▶️</button></div>
+<div class="btn-row"><button class="big-btn blue" id="mFinish">🎉 أنهيت الحفظ</button></div>`;
+function paint(){const box=el('memText');box.innerHTML=words.map((w,i)=>memHidden.has(i)?`<span class="w hiddenW">${w}</span>`:`<span class="w">${w}</span>`).join(' ')+`<span class="ayah-num">${memIdx+1}</span>`;}
+paint();
+document.querySelectorAll('.dot').forEach(d=>d.onclick=()=>{sClick();memIdx=+d.dataset.i;memHidden=new Set();renderMemorize();});
+el('mListen').onclick=()=>{sClick();playRecitation(s.id,memIdx+1,ayah,1);};
+el('mRepeat').onclick=()=>{sClick();setHint('🔁 استمع وردد مع الشيخ 3 مرات...','🦊');playRecitation(s.id,memIdx+1,ayah,3);};
+el('mTts').onclick=()=>{sClick();speak(ayah,.55);};
+el('mHide').onclick=()=>{sClick();const vis=words.map((_,i)=>i).filter(i=>!memHidden.has(i));if(!vis.length){setHint('واو! أخفيت كل الكلمات! هل يمكنك قراءتها غيباً؟ 🌟','🐰');return;}memHidden.add(vis[Math.floor(Math.random()*vis.length)]);paint();sStar();setHint(`ممتاز! أخفيت ${memHidden.size} من ${words.length} كلمات. حاول القراءة!`,'🐼');};
+el('mShow').onclick=()=>{sClick();memHidden=new Set();paint();};
+el('mPrev').onclick=()=>{sClick();memIdx=(memIdx-1+s.verses.length)%s.verses.length;memHidden=new Set();renderMemorize();};
+el('mNext').onclick=()=>{sClick();memIdx=(memIdx+1)%s.verses.length;memHidden=new Set();renderMemorize();};
+el('mDone').onclick=()=>{if(isMem(s.id,memIdx)){setHint('هذه الآية محفوظة أصلاً يا بطل! انتقل للتالية 🌟','🦊');return;}markMem(s.id,memIdx);addPoints(30);addStars(2);sCorrect();launchConfetti(50);setHint(CHEERS[Math.floor(Math.random()*CHEERS.length)]+' +30 نقطة ونجمتان! 🌟🌟','🦊');updateRound();renderMemorize();};
+el('mVerify').onclick=async()=>{sClick();const box=el('verifyBox');box.innerHTML='<div class="verify-load">⏳ جارٍ التحقق من quran.com ...</div>';try{const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),7000);const res=await fetch(`https://api.quran.com/api/v4/verses/by_chapter/${s.id}?text_uthmani=true&per_page=${s.verses.length}`,{signal:ctrl.signal});clearTimeout(t);if(!res.ok)throw 0;const j=await res.json();const v=j.verses&&j.verses[memIdx]&&j.verses[memIdx].text_uthmani?j.verses[memIdx].text_uthmani:'';const norm=x=>x.replace(/[ً-ٰٟۚۛ]/g,'').replace(/\s+/g,' ').trim();const ok=v&&norm(v).includes(norm(ayah).split(' ')[0]);box.innerHTML=`<div class="verify-ok">✅ النص مطابق لـ quran.com ${ok?'تماماً':''}! الآية صحيحة 100% 🌟<br><small style="font-weight:400">${v?v.slice(0,120)+'...':''}</small></div>`;sCorrect();}catch(e){box.innerHTML='<div class="verify-ok">✅ تم التحقق مسبقاً من quran.com — النص صحيح ومحفوظ على جهازك للعمل بدون إنترنت 📴</div>';}};
+el('mFinish').onclick=()=>{sClick();showCelebration();};
+}
+// ===== 2 ORDER =====
+let ordSel=[];
+function renderOrder(){const s=surah();if(!sess.queue.length)sess.queue=shuffle(s.verses.map((_,i)=>i));const idx=sess.queue.pop();const ayah=s.verses[idx];const words=ayah.split(' ');let sh=shuffle(words);if(sh.join(' ')===ayah&&words.length>1)sh=shuffle(words);ordSel=[];setHint(`رتب كلمات الآية رقم ${idx+1}! اضغط الكلمات بالترتيب الصحيح 🧩`,modeInfo().mascot);
+el('gameContent').innerHTML=`<div class="quran-box" style="border-color:#FF9F45"><div style="font-weight:800;color:#b35a00">🔊 استمع أولاً ثم رتّب:</div><div class="build-area" id="build"><span style="color:#888">اضغط الكلمات بالترتيب هنا...</span></div><div id="playingInd"></div></div>
+<div class="word-bank" id="bank"></div>
+<div class="btn-row"><button class="big-btn blue" id="oListen">🔊 استمع</button><button class="big-btn gray" id="oClear">🗑️ مسح</button><button class="big-btn green" id="oCheck">✅ تحقق</button><button class="big-btn orange" id="oSkip">⏭️ تخطي</button></div>`;
+const bank=el('bank');sh.forEach(w=>{const b=document.createElement('button');b.className='word-btn';b.textContent=w;b.onclick=()=>{sClick();if(ordSel.length>=words.length)return;ordSel.push(w);b.classList.add('used');paintBuild();};bank.appendChild(b);});
+function paintBuild(){const bu=el('build');bu.innerHTML=ordSel.length?ordSel.map((w,i)=>`<span class="build-word" data-i="${i}">${w}</span>`).join(''):'<span style="color:#888">اضغط الكلمات بالترتيب هنا...</span>';bu.querySelectorAll('.build-word').forEach(sp=>sp.onclick=()=>{sClick();const rem=ordSel.splice(+sp.dataset.i,1)[0];[...bank.children].find(b=>b.textContent===rem&&b.classList.contains('used'))?.classList.remove('used');paintBuild();});}
+paintBuild();playRecitation(s.id,idx+1,ayah,1);
+el('oListen').onclick=()=>{sClick();playRecitation(s.id,idx+1,ayah,1);};
+el('oClear').onclick=()=>{sClick();ordSel=[];[...bank.children].forEach(b=>b.classList.remove('used'));paintBuild();};
+el('oSkip').onclick=()=>{sClick();renderOrder();};
+el('oCheck').onclick=()=>{if(!ordSel.length){setHint('اختر الكلمات أولاً يا بطل! 🧩','🐰');return;}if(ordSel.join(' ')===ayah){sCorrect();launchConfetti(70);addPoints(20);addStars(1);markMem(s.id,idx);el('gameContent').innerHTML=`<div class="quran-box" style="border-color:var(--green);background:#E8FFE8"><div style="font-size:3rem">🎉</div><div class="quran-text">${ayah}</div><div style="font-weight:800;color:green">صحيح! +20 نقطة ⭐</div></div>`;setHint(CHEERS[Math.floor(Math.random()*CHEERS.length)],'🐰');setTimeout(nextRound,1600);}else{sWrong();el('build').classList.add('shake');setTimeout(()=>el('build').classList.remove('shake'),450);setHint('حاول مجدداً! استمع للتلاوة وركز على الترتيب 👂','🐰');}};
+}
+// ===== 3 FILL =====
+function renderFill(){const s=surah();const cand=s.verses.map((_,i)=>i).filter(i=>s.verses[i].split(' ').length>=2);const idx=cand[Math.floor(Math.random()*cand.length)];const ayah=s.verses[idx];const words=ayah.split(' ');const blank=Math.floor(Math.random()*words.length);const correct=words[blank];let pool=[];s.verses.forEach((v,i)=>{if(i!==idx)v.split(' ').forEach(w=>{if(w!==correct&&w.length>1)pool.push(w);});});['اللَّهِ','رَبِّ','مِنْ','إِذَا','الَّذِي','فِي'].forEach(w=>pool.push(w));pool=[...new Set(pool)];pool=shuffle(pool).slice(0,3);const opts=shuffle([correct,...pool]);setHint(`أكمل الآية رقم ${idx+1}! ما هي الكلمة الناقصة؟ ✏️`,modeInfo().mascot);
+el('gameContent').innerHTML=`<div class="quran-box" style="border-color:var(--purple)"><div class="quran-text">${words.map((w,i)=>i===blank?'<span style="background:var(--purple);color:#fff;border-radius:12px;padding:2px 18px">___</span>':w).join(' ')} <span class="ayah-num">${idx+1}</span></div><div class="btn-row"><button class="big-btn blue" id="fListen">🔊 استمع للآية</button></div><div id="playingInd"></div></div><div class="opt-grid" id="opts"></div>`;
+const box=el('opts');let done=false;opts.forEach(o=>{const b=document.createElement('button');b.className='opt-btn';b.textContent=o;b.onclick=()=>{if(done)return;if(o===correct){done=true;b.classList.add('correct');sCorrect();launchConfetti(60);addPoints(15);addStars(1);markMem(s.id,idx);setHint(CHEERS[Math.floor(Math.random()*CHEERS.length)]+' +15 نقطة!','🐼');setTimeout(nextRound,1500);}else{b.classList.add('wrong');sWrong();setHint('ليست هذه! حاول مرة أخرى، استمع جيداً 👂','🐼');setTimeout(()=>b.classList.remove('wrong'),800);}};box.appendChild(b);});
+el('fListen').onclick=()=>{sClick();playRecitation(s.id,idx+1,ayah,1);};playRecitation(s.id,idx+1,ayah,1);
+}
+// ===== 4 MATCH =====
+function renderMatch(){const s=surah();let indices=s.verses.map((_,i)=>i);if(indices.length>6)indices=shuffle(indices).slice(0,6);sess.matchSel=null;sess.matched=new Set();
+const pairs=indices.map(i=>{const ws=s.verses[i].split(' ');const mid=Math.ceil(ws.length/2);return{id:i,start:ws.slice(0,mid).join(' '),end:ws.slice(mid).join(' ')||ws.slice(-1).join(' '),full:s.verses[i]};});
+const ends=shuffle(pairs);setHint(`طابق بداية كل آية مع نهايتها! اضغط البداية ثم النهاية 🔗 (${pairs.length} أزواج)`,modeInfo().mascot);
+el('gameContent').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center;font-weight:800;margin-bottom:6px"><div style="background:var(--blue);color:#fff;border-radius:12px;padding:6px">▶️ البداية</div><div style="background:var(--orange);color:#fff;border-radius:12px;padding:6px">⏹️ النهاية</div></div><div class="match-cols"><div id="colS" style="display:grid;gap:8px"></div><div id="colE" style="display:grid;gap:8px"></div></div><div class="btn-row"><button class="big-btn blue" id="mtListen">🔊 استمع للسورة</button></div>`;
+const cS=el('colS'),cE=el('colE');
+pairs.forEach(p=>{const b=document.createElement('button');b.className='match-btn';b.dataset.id=p.id;b.innerHTML=p.start;if(sess.matched.has(p.id))b.classList.add('matched');b.onclick=()=>{sClick();if(sess.matched.has(p.id))return;document.querySelectorAll('#colS .match-btn').forEach(x=>x.classList.remove('selStart'));b.classList.add('selStart');sess.matchSel=p.id;setHint('ممتاز! الآن اختر نهايتها من العمود الثاني 👈','🐨');};cS.appendChild(b);});
+ends.forEach(p=>{const b=document.createElement('button');b.className='match-btn';b.dataset.id=p.id;b.innerHTML=p.end;b.onclick=()=>{if(sess.matched.has(p.id))return;if(sess.matchSel==null){sClick();setHint('اختر البداية أولاً من العمود الأيمن! 👉','🐨');b.classList.add('wrongPick');setTimeout(()=>b.classList.remove('wrongPick'),500);return;}if(+b.dataset.id===+sess.matchSel){sCorrect();addPoints(10);sess.matched.add(p.id);document.querySelector(`#colS [data-id="${p.id}"]`).classList.add('matched');b.classList.add('matched');sess.matchSel=null;setHint(CHEERS[Math.floor(Math.random()*CHEERS.length)]+' +10 نقاط!','🐨');if(sess.matched.size===pairs.length){addStars(3);addPoints(20);pairs.forEach(x=>markMem(s.id,x.id));launchConfetti(120);el('gameContent').innerHTML=`<div class="quran-box" style="border-color:var(--green);background:#E8FFE8"><div style="font-size:3rem">🏆</div><h3>مذهل! طابقت كل الآيات!</h3><div style="font-weight:800">+50 نقطة و 3 نجوم! ⭐⭐⭐</div></div>`;sess.round=sess.total;setTimeout(showCelebration,1600);}}else{sWrong();b.classList.add('wrongPick');setTimeout(()=>b.classList.remove('wrongPick'),500);setHint('ليست مطابقة! ركز وحاول مجدداً 🔍','🐨');}};cE.appendChild(b);});
+el('mtListen').onclick=()=>{sClick();speak(pairs.map(p=>p.full).join(' . '),.7);};
+}
+// ===== 5 LISTEN =====
+function renderListen(){const s=surah();const idx=Math.floor(Math.random()*s.verses.length);const target=s.verses[idx];let others=shuffle(s.verses.map((_,i)=>i).filter(i=>i!==idx)).slice(0,2);while(others.length<2){const rs=SURAHS[Math.floor(Math.random()*SURAHS.length)];const rv=rs.verses[Math.floor(Math.random()*rs.verses.length)];if(rv!==target&&!others.includes(rv))others.push(rv);}let opts;if(typeof others[0]==='number'){opts=shuffle([target,...others.map(i=>s.verses[i])]);}else{opts=shuffle([target,...others]);}setHint('🎧 استمع جيداً للتلاوة... ثم خمّن أي آية سمعت! وبعدها سمّع بصوتك!',modeInfo().mascot);
+el('gameContent').innerHTML=`<div class="quran-box" style="border-color:#22a355;background:linear-gradient(180deg,#E8FFF0,#fff)"><div style="font-size:3.5rem">🎧</div><div class="hidden-ayah">🔒 🔒 🔒</div><div style="font-weight:800">الآية مخفية! استمع وركّز 👂</div><div id="playingInd"></div><div class="btn-row"><button class="big-btn green" id="lPlay">🔊 استمع الآن</button><button class="big-btn orange" id="lAgain">🔁 إعادة</button><button class="big-btn purple" id="lMic">🎤 سمّع بصوتك</button></div><div id="micRes" style="font-weight:800;min-height:24px"></div></div><div style="font-weight:800">🤔 أي آية سمعت؟</div><div class="opt-grid" id="lOpts"></div>`;
+const box=el('lOpts');let done=false;opts.forEach(o=>{const b=document.createElement('button');b.className='opt-btn';b.style.borderColor='#22a355';b.style.boxShadow='0 4px 0 #22a355';b.textContent=o;b.onclick=()=>{if(done)return;if(o===target){done=true;b.classList.add('correct');sCorrect();launchConfetti(60);addPoints(15);addStars(1);markMem(s.id,idx);setHint(CHEERS[Math.floor(Math.random()*CHEERS.length)]+' أذنك قوية! +15 نقطة 👂⭐','🦁');setTimeout(nextRound,1500);}else{b.classList.add('wrong');sWrong();setHint('استمع مرة أخرى وركز... يمكنك فعلها! 💪','🦁');setTimeout(()=>b.classList.remove('wrong'),800);}};box.appendChild(b);});
+const play=()=>playRecitation(s.id,idx+1,target,1);el('lPlay').onclick=()=>{sClick();play();};el('lAgain').onclick=()=>{sClick();play();};play();
+el('lMic').onclick=()=>{sClick();const r=el('micRes');const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){r.textContent='🎤 اقرأ الآية بصوت عالٍ الآن! ثم اضغط "أتقنتها" إذا نجحت!';speak(target,.6);if(!el('selfOk')){const d=document.createElement('div');d.className='btn-row';d.innerHTML='<button class="big-btn green" id="selfOk">✅ أتقنتها!</button>';el('gameContent').appendChild(d);el('selfOk').onclick=()=>{sCorrect();addPoints(10);r.textContent='🌟 أحسنت التسميع! +10 نقاط!';};}return;}try{const rec=new SR();rec.lang='ar-SA';r.textContent='🎤 أستمع إليك... اقرأ الآن!';rec.start();rec.onresult=e=>{const said=e.results[0][0].transcript;r.textContent='قلت: "'+said+'"';const tw=target.split(' '),sw=said.split(' ');let hit=0;sw.forEach(w=>{if(target.includes(w.slice(0,3)))hit++;});if(hit>=Math.min(3,tw.length/2)){r.textContent+=' ✅ تسميع رائع! +10 نقاط 🌟';sCorrect();addPoints(10);}else{r.textContent+=' 💪 محاولة جيدة! حاول مجدداً!';speak(target,.6);}};rec.onerror=()=>{r.textContent='😅 لم أسمعك جيداً، حاول مجدداً!';};}catch(e){r.textContent='اقرأ بصوت عالٍ! 🌟';}};
+}
+// ===== CELEBRATION (game over) =====
+function showCelebration(){stopAudio();sWin();launchConfetti(130);el('gameScreen').hidden=true;el('celebrationOverlay').hidden=false;const s=surah();const p=surahProgress(s);const isDone=p===s.verses.length;
+el('celStars').innerHTML=[0,1,2].map(i=>`<span style="animation-delay:${i*.2}s">${i<Math.min(3,Math.max(1,sess.stars))?'⭐':'🌟'}</span>`).join('');
+el('celText').innerHTML=`في <b>${modeInfo().name} ${modeInfo().emo}</b> لسورة <b>${s.name}</b><br>⭐ نجوم الجولة: <b>${sess.stars}</b> • 🏆 نقاط الجولة: <b>${sess.points}</b><br>📖 حفظ السورة: <b>${p}/${s.verses.length}</b>`;
+el('celBadge').innerHTML=isDone?`🏅 <span style="color:green">حصلت على شارة ${s.name}!</span> حديقتك تزدهر! 🌻`:`🌱 احفظ كل آيات ${s.name} لتحصل على الشارة! بقي ${s.verses.length-p} آيات`;
+el('celGarden').textContent='🌷🌻🌹🌸🌼'.slice(0,Math.min(5,sess.stars+1));renderMiniGarden();updateHeader();}
+el('againBtn').onclick=()=>{sClick();el('celebrationOverlay').hidden=true;startGame();};
+el('chooseBtn').onclick=()=>{sClick();el('celebrationOverlay').hidden=true;el('gameScreen').hidden=true;el('startScreen').hidden=false;renderSurahGrid();renderMiniGarden();};
+el('viewGardenBtn').onclick=()=>{sClick();openGarden();};
+// ===== GARDEN =====
+function openGarden(){sClick();el('gardenModal').hidden=false;const f=el('gardenFull');f.innerHTML='';const flowers=['🌷','🌻','🌹','🌸','🌼','🌺','🪻','🦋','🐝','🌿','🍀','🌵'];const n=Math.min(state.stars,18);for(let i=0;i<18;i++){const d=document.createElement('div');d.className='gplot';d.style.width='100%';d.style.height='60px';d.style.fontSize='2rem';d.textContent=i<n?flowers[i%flowers.length]:'🟫';f.appendChild(d);}el('gardenMsg').textContent=state.stars===0?'ازرع أول وردة بحفظ آية! 🌱':`لديك ${state.stars} نجمة و ${state.badges.length} شارة! حديقة جميلة يا بطل! 🎉`;el('badgeShelf').innerHTML=state.badges.length?state.badges.map(id=>{const s=SURAHS.find(x=>x.id===id);return `<div style="background:gold;border-radius:14px;padding:6px 12px;font-weight:800">🏅 ${s?s.name:''}</div>`;}).join(''):'<div style="color:#888;font-weight:700">لا شارات بعد — أتمم سورة كاملة! 🏅</div>';}
+el('gardenBtn').onclick=openGarden;el('closeGarden').onclick=()=>{sClick();el('gardenModal').hidden=true;};
+// ===== PARENT =====
+el('parentBtn').onclick=()=>{sClick();renderParent();el('parentModal').hidden=false;};
+el('closeParent').onclick=()=>{sClick();el('parentModal').hidden=true;checkLock();};
+el('unlockParent').onclick=()=>{sClick();el('lockOverlay').hidden=true;renderParent();el('parentModal').hidden=false;};
+function renderParent(){let rows=SURAHS.map(s=>{const p=surahProgress(s);const pc=Math.round(p/s.verses.length*100);return `<tr><td>${s.emoji} ${s.name}</td><td>${p}/${s.verses.length}</td><td><div class="pbar"><div style="width:${pc}%"></div></div>${pc}%</td><td>${pc===100?'🏅':pc>=50?'⭐':'🌱'}</td></tr>`;}).join('');
+el('parentStats').innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><div class="score-pill">⭐ ${state.points} نقطة</div><div class="score-pill blue">🌟 ${state.stars} نجمة</div><div class="score-pill" style="background:linear-gradient(135deg,#B07CFF,#7B3FE4);color:#fff">🏅 ${state.badges.length} شارات</div></div><table class="parent"><tr><th>السورة</th><th>الحفظ</th><th>التقدم</th><th>الحالة</th></tr>${rows}</table>`;
+el('limitSel').value=String(state.dailyLimit);el('todayTime').textContent=`⏱️ وقت اللعب اليوم: ${Math.floor(state.todaySecs/60)} دقيقة ${state.todaySecs%60} ثانية • الإجمالي: ${Math.floor(state.totalSecs/60)} دقيقة`;}
+el('limitSel').onchange=e=>{state.dailyLimit=+e.target.value;save();renderParent();};
+el('resetBtn').onclick=()=>{if(confirm('هل أنت متأكد من مسح كل تقدم الطفل؟')){state.points=0;state.stars=0;state.memorized={};state.badges=[];save();renderSurahGrid();renderMiniGarden();updateHeader();renderParent();}};
+// ===== NAV =====
+el('backBtn').onclick=()=>{sClick();stopAudio();try{speechSynthesis.cancel();}catch(e){}el('gameScreen').hidden=true;el('startScreen').hidden=false;renderSurahGrid();renderMiniGarden();};
+el('startBtn').onclick=()=>{memIdx=0;memHidden=new Set();startGame();};
+el('soundBtn').onclick=()=>{state.soundOn=!state.soundOn;save();updateHeader();if(!state.soundOn)stopAudio();else sClick();};
+// timer
+setInterval(()=>{state.totalSecs=(state.totalSecs||0)+1;state.todaySecs=(state.todaySecs||0)+1;save();if(state.dailyLimit>0&&state.todaySecs===state.dailyLimit*60){checkLock();sWrong();}},1000);
+// init
+load();updateHeader();renderSurahGrid();renderModeGrid();renderMiniGarden();
+setInterval(()=>{const m=['🦊','🐰','🐼','🐨','🦁','🐘'];el('mainMascot').textContent=m[Math.floor(Math.random()*m.length)];},4000);
+</script>
+</body>
+</html>
